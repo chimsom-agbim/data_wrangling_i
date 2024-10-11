@@ -9,7 +9,7 @@ library(tidyverse)
 
 ## Read in some data
 
-Read in the litters dataset. 
+Read in the litters dataset. The janitor function cleans up the names so there are not extra spaces and characters. You can compare the file after janitors to the before file.
 
 ```{r}
 litters_df = read_csv("./data/FAS_litters.csv")
@@ -31,3 +31,29 @@ skimr::skim(litters_df)
 ## Options to read_csv
  
 If you want to learn more about the file without perusing it, type in the console `?read_csv()` for more information. 
+
+## Other file formats
+
+Read in an excel file. 
+
+```{r}
+library(readxl)
+mlb_df = read_excel("./data/mlb11.xlsx")
+mlb_df
+
+```
+
+Excel files also tend to have multiple sheets, so if you need help reading those, enter this in the console `?read_excel` to get more information. There you can learn how to read in only part of the file. Example
+
+```{r}
+mlb_df = read_excel("./data/mlb11.xlsx", range= "A1:F7")
+mlb_df
+```
+Read in a SAS file. 
+
+```{r}
+library(haven)
+pulse_df = read_sas("./data/public_pulse_data.sas7bdat")
+pulse_df
+```
+
