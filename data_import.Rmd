@@ -56,4 +56,5 @@ library(haven)
 pulse_df = read_sas("./data/public_pulse_data.sas7bdat")
 pulse_df
 ```
-
+## Comparison with Base R
+Basically don't enter a file code as read.csv instead of read_csv. It changes the names of the columns, which can be confusing.
