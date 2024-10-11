@@ -18,3 +18,14 @@ litters_df = janitor::clean_names(litters_df)
 ```
 ## Take a look at the data
 
+Printing in the console. 
+```{r}
+litters_df
+```
+
+## I like the skimr function because it can tell you if there are missing values for a given variable (look at the 4*8)
+Here a value for gd0_weight was not entered for 15 litter samples. The histogram also can tell you if there's a bimodal distrbution of data. 
+```{r}
+skimr::skim(litters_df)
+```
+
