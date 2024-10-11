@@ -28,4 +28,6 @@ Here a value for gd0_weight was not entered for 15 litter samples. The histogram
 ```{r}
 skimr::skim(litters_df)
 ```
-
+## Options to read_csv
+ 
+If you want to learn more about the file without perusing it, type in the console `?read_csv()` for more information. 
