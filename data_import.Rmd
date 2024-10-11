@@ -58,3 +58,12 @@ pulse_df
 ```
 ## Comparison with Base R
 Basically don't enter a file code as read.csv instead of read_csv. It changes the names of the columns, which can be confusing.
+
+## Exporting Data 
+
+Export the mlb sub-table. The first entry is the file and the second entry is the name of the new file you want to export. 
+
+```{r}
+write_csv(mlb_df, "./data/mlb_subtable.csv")
+```
+
