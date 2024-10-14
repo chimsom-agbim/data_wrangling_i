@@ -15,4 +15,36 @@ litters_df = read_csv("./data/FAS_litters.csv")
 litters_df = janitor::clean_names(litters_df)
 litters_df
 ```
+## How to use the select function
+
+Choose some columns and not others
+```{r}
+select(litters_df, group, litter_number)
+```
+
+This code here lets you select a range of columns 
+```{r}
+select(litters_df, group, gd0_weight:gd_of_birth)
+```
+
+You can also get rid of columns
+```{r}
+select(litters_df, -litter_number)
+
+```
+
+Renaming columns-- put the new name first 
+
+```{r}
+select(litters_df, GROUP = group, LITTer_NUmBer = litter_number)
+```
+You can also use the select function for particular columns you want to keep 
+Type this into the console and see objects exported from other packages above dplyr  `?select_helpers` 
+```{r}
+select(litters_df, starts_with("gd"))
+```
+This code lets you put litter number as the first column and move the others 
+```{r}
+select(litters_df, litter_number, everything())
+```
 

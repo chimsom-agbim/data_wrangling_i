@@ -51,3 +51,136 @@ litters_df
     ## 10 Con8  #3/5/2/2/95     28.5       <NA>                 20               8
     ## # ℹ 39 more rows
     ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+## How to use the select function
+
+Choose some columns and not others
+
+``` r
+select(litters_df, group, litter_number)
+```
+
+    ## # A tibble: 49 × 2
+    ##    group litter_number  
+    ##    <chr> <chr>          
+    ##  1 Con7  #85            
+    ##  2 Con7  #1/2/95/2      
+    ##  3 Con7  #5/5/3/83/3-3  
+    ##  4 Con7  #5/4/2/95/2    
+    ##  5 Con7  #4/2/95/3-3    
+    ##  6 Con7  #2/2/95/3-2    
+    ##  7 Con7  #1/5/3/83/3-3/2
+    ##  8 Con8  #3/83/3-3      
+    ##  9 Con8  #2/95/3        
+    ## 10 Con8  #3/5/2/2/95    
+    ## # ℹ 39 more rows
+
+This code here lets you select a range of columns
+
+``` r
+select(litters_df, group, gd0_weight:gd_of_birth)
+```
+
+    ## # A tibble: 49 × 4
+    ##    group gd0_weight gd18_weight gd_of_birth
+    ##    <chr> <chr>      <chr>             <dbl>
+    ##  1 Con7  19.7       34.7                 20
+    ##  2 Con7  27         42                   19
+    ##  3 Con7  26         41.4                 19
+    ##  4 Con7  28.5       44.1                 19
+    ##  5 Con7  <NA>       <NA>                 20
+    ##  6 Con7  <NA>       <NA>                 20
+    ##  7 Con7  <NA>       <NA>                 20
+    ##  8 Con8  <NA>       <NA>                 20
+    ##  9 Con8  <NA>       <NA>                 20
+    ## 10 Con8  28.5       <NA>                 20
+    ## # ℹ 39 more rows
+
+You can also get rid of columns
+
+``` r
+select(litters_df, -litter_number)
+```
+
+    ## # A tibble: 49 × 7
+    ##    group gd0_weight gd18_weight gd_of_birth pups_born_alive pups_dead_birth
+    ##    <chr> <chr>      <chr>             <dbl>           <dbl>           <dbl>
+    ##  1 Con7  19.7       34.7                 20               3               4
+    ##  2 Con7  27         42                   19               8               0
+    ##  3 Con7  26         41.4                 19               6               0
+    ##  4 Con7  28.5       44.1                 19               5               1
+    ##  5 Con7  <NA>       <NA>                 20               6               0
+    ##  6 Con7  <NA>       <NA>                 20               6               0
+    ##  7 Con7  <NA>       <NA>                 20               9               0
+    ##  8 Con8  <NA>       <NA>                 20               9               1
+    ##  9 Con8  <NA>       <NA>                 20               8               0
+    ## 10 Con8  28.5       <NA>                 20               8               0
+    ## # ℹ 39 more rows
+    ## # ℹ 1 more variable: pups_survive <dbl>
+
+Renaming columns– put the new name first
+
+``` r
+select(litters_df, GROUP = group, LITTer_NUmBer = litter_number)
+```
+
+    ## # A tibble: 49 × 2
+    ##    GROUP LITTer_NUmBer  
+    ##    <chr> <chr>          
+    ##  1 Con7  #85            
+    ##  2 Con7  #1/2/95/2      
+    ##  3 Con7  #5/5/3/83/3-3  
+    ##  4 Con7  #5/4/2/95/2    
+    ##  5 Con7  #4/2/95/3-3    
+    ##  6 Con7  #2/2/95/3-2    
+    ##  7 Con7  #1/5/3/83/3-3/2
+    ##  8 Con8  #3/83/3-3      
+    ##  9 Con8  #2/95/3        
+    ## 10 Con8  #3/5/2/2/95    
+    ## # ℹ 39 more rows
+
+You can also use the select function for particular columns you want to
+keep Type this into the console and see objects exported from other
+packages above dplyr `?select_helpers`
+
+``` r
+select(litters_df, starts_with("gd"))
+```
+
+    ## # A tibble: 49 × 3
+    ##    gd0_weight gd18_weight gd_of_birth
+    ##    <chr>      <chr>             <dbl>
+    ##  1 19.7       34.7                 20
+    ##  2 27         42                   19
+    ##  3 26         41.4                 19
+    ##  4 28.5       44.1                 19
+    ##  5 <NA>       <NA>                 20
+    ##  6 <NA>       <NA>                 20
+    ##  7 <NA>       <NA>                 20
+    ##  8 <NA>       <NA>                 20
+    ##  9 <NA>       <NA>                 20
+    ## 10 28.5       <NA>                 20
+    ## # ℹ 39 more rows
+
+This code lets you put litter number as the first column and move the
+others
+
+``` r
+select(litters_df, litter_number, everything())
+```
+
+    ## # A tibble: 49 × 8
+    ##    litter_number   group gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr>           <chr> <chr>      <chr>             <dbl>           <dbl>
+    ##  1 #85             Con7  19.7       34.7                 20               3
+    ##  2 #1/2/95/2       Con7  27         42                   19               8
+    ##  3 #5/5/3/83/3-3   Con7  26         41.4                 19               6
+    ##  4 #5/4/2/95/2     Con7  28.5       44.1                 19               5
+    ##  5 #4/2/95/3-3     Con7  <NA>       <NA>                 20               6
+    ##  6 #2/2/95/3-2     Con7  <NA>       <NA>                 20               6
+    ##  7 #1/5/3/83/3-3/2 Con7  <NA>       <NA>                 20               9
+    ##  8 #3/83/3-3       Con8  <NA>       <NA>                 20               9
+    ##  9 #2/95/3         Con8  <NA>       <NA>                 20               8
+    ## 10 #3/5/2/2/95     Con8  28.5       <NA>                 20               8
+    ## # ℹ 39 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
