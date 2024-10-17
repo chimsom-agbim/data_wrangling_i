@@ -328,3 +328,211 @@ filter(litters_df, group %in% c("Con7", "Mod8"))
     ## 13 Mod8  #2/95/2         28.5       44.5                 20               9
     ## 14 Mod8  #82/4           33.4       52.7                 20               8
     ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+You can also arrange the data set based on the values in a particular
+column so it’s in lowest to highest etc.
+
+``` r
+arrange(litters_df, pups_born_alive)
+```
+
+    ## # A tibble: 49 × 8
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>         <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85           19.7       34.7                 20               3
+    ##  2 Low7  #111          25.5       44.6                 20               3
+    ##  3 Low8  #4/84         21.8       35.2                 20               4
+    ##  4 Con7  #5/4/2/95/2   28.5       44.1                 19               5
+    ##  5 Con8  #2/2/95/2     <NA>       <NA>                 19               5
+    ##  6 Mod7  #3/82/3-2     28         45.9                 20               5
+    ##  7 Mod7  #5/3/83/5-2   22.6       37                   19               5
+    ##  8 Mod7  #106          21.7       37.8                 20               5
+    ##  9 Con7  #5/5/3/83/3-3 26         41.4                 19               6
+    ## 10 Con7  #4/2/95/3-3   <NA>       <NA>                 20               6
+    ## # ℹ 39 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+You can also arrange so that within the order for one column, a second
+column’s values can be in order. Just enter the columns in the order
+that you want them arranged.So compared to the 2 values with 3, the
+first value will be the lowest gd0_weight.
+
+``` r
+arrange(litters_df, pups_born_alive, gd0_weight)
+```
+
+    ## # A tibble: 49 × 8
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>         <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85           19.7       34.7                 20               3
+    ##  2 Low7  #111          25.5       44.6                 20               3
+    ##  3 Low8  #4/84         21.8       35.2                 20               4
+    ##  4 Mod7  #106          21.7       37.8                 20               5
+    ##  5 Mod7  #5/3/83/5-2   22.6       37                   19               5
+    ##  6 Mod7  #3/82/3-2     28         45.9                 20               5
+    ##  7 Con7  #5/4/2/95/2   28.5       44.1                 19               5
+    ##  8 Con8  #2/2/95/2     <NA>       <NA>                 19               5
+    ##  9 Low8  #99           23.5       39                   20               6
+    ## 10 Low7  #112          23.9       40.5                 19               6
+    ## # ℹ 39 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+## The Pipe function
+
+My understanding is that it’s a sreies of iterative functions. I want to
+create the edited file litters_data_selected.
+
+``` r
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_data_selected
+```
+
+    ## # A tibble: 49 × 7
+    ##    group litter_number   gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>           <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85             19.7       34.7                 20               3
+    ##  2 Con7  #1/2/95/2       27         42                   19               8
+    ##  3 Con7  #5/5/3/83/3-3   26         41.4                 19               6
+    ##  4 Con7  #5/4/2/95/2     28.5       44.1                 19               5
+    ##  5 Con7  #4/2/95/3-3     <NA>       <NA>                 20               6
+    ##  6 Con7  #2/2/95/3-2     <NA>       <NA>                 20               6
+    ##  7 Con7  #1/5/3/83/3-3/2 <NA>       <NA>                 20               9
+    ##  8 Con8  #3/83/3-3       <NA>       <NA>                 20               9
+    ##  9 Con8  #2/95/3         <NA>       <NA>                 20               8
+    ## 10 Con8  #3/5/2/2/95     28.5       <NA>                 20               8
+    ## # ℹ 39 more rows
+    ## # ℹ 1 more variable: pups_dead_birth <dbl>
+
+I REALLY like this drop_na function because it will exclude rows where a
+value for a particular column is gone. In this case, I will check values
+in the gd0_weight column
+
+``` r
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_with_only_complete_value = drop_na(litters_data_selected, gd0_weight)
+litters_with_only_complete_value
+```
+
+    ## # A tibble: 36 × 7
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>         <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85           19.7       34.7                 20               3
+    ##  2 Con7  #1/2/95/2     27         42                   19               8
+    ##  3 Con7  #5/5/3/83/3-3 26         41.4                 19               6
+    ##  4 Con7  #5/4/2/95/2   28.5       44.1                 19               5
+    ##  5 Con8  #3/5/2/2/95   28.5       <NA>                 20               8
+    ##  6 Con8  #5/4/3/83/3   28         <NA>                 19               9
+    ##  7 Mod7  #59           17         33.4                 19               8
+    ##  8 Mod7  #103          21.4       42.1                 19               9
+    ##  9 Mod7  #3/82/3-2     28         45.9                 20               5
+    ## 10 Mod7  #4/2/95/2     23.5       <NA>                 19               9
+    ## # ℹ 26 more rows
+    ## # ℹ 1 more variable: pups_dead_birth <dbl>
+
+If you drop the specification for a column, you can get rid of all
+missing data where an Na is entered
+
+``` r
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_with_only_complete_value = drop_na(litters_data_selected)
+litters_with_only_complete_value
+```
+
+    ## # A tibble: 33 × 7
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>         <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85           19.7       34.7                 20               3
+    ##  2 Con7  #1/2/95/2     27         42                   19               8
+    ##  3 Con7  #5/5/3/83/3-3 26         41.4                 19               6
+    ##  4 Con7  #5/4/2/95/2   28.5       44.1                 19               5
+    ##  5 Mod7  #59           17         33.4                 19               8
+    ##  6 Mod7  #103          21.4       42.1                 19               9
+    ##  7 Mod7  #3/82/3-2     28         45.9                 20               5
+    ##  8 Mod7  #5/3/83/5-2   22.6       37                   19               5
+    ##  9 Mod7  #8/110/3-2    .          .                    20               9
+    ## 10 Mod7  #106          21.7       37.8                 20               5
+    ## # ℹ 23 more rows
+    ## # ℹ 1 more variable: pups_dead_birth <dbl>
+
+Here’s the pipe operator. It basically prevents you from having to
+retype the argument for the next function because it will automatically
+use it. The pipe function means do this and then do this. I’m telling it
+to do the same code as above.
+
+``` r
+litters_df = read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  drop_na()
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_df
+```
+
+    ## # A tibble: 33 × 7
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>         <chr>      <chr>             <dbl>           <dbl>
+    ##  1 Con7  #85           19.7       34.7                 20               3
+    ##  2 Con7  #1/2/95/2     27         42                   19               8
+    ##  3 Con7  #5/5/3/83/3-3 26         41.4                 19               6
+    ##  4 Con7  #5/4/2/95/2   28.5       44.1                 19               5
+    ##  5 Mod7  #59           17         33.4                 19               8
+    ##  6 Mod7  #103          21.4       42.1                 19               9
+    ##  7 Mod7  #3/82/3-2     28         45.9                 20               5
+    ##  8 Mod7  #5/3/83/5-2   22.6       37                   19               5
+    ##  9 Mod7  #8/110/3-2    .          .                    20               9
+    ## 10 Mod7  #106          21.7       37.8                 20               5
+    ## # ℹ 23 more rows
+    ## # ℹ 1 more variable: pups_dead_birth <dbl>

@@ -78,10 +78,8 @@ I cna also search for 2 groups
 ```{r}
 filter(litters_df, group %in% c("Con7", "Mod8"))
 ```
-There's also the mutate function that allows you to modify an existing variable or create a new variable, however this code didn't work because there are non-numeric values in the set
-```{r}
-mutate(litters_df, wt_gain = gd18_weight - gd0_weight)
-```
+
+
 You can also arrange the data set based on the values in a particular column so it's in lowest to highest etc. 
 
 ```{r}
