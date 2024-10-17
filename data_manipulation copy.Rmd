@@ -47,4 +47,35 @@ This code lets you put litter number as the first column and move the others
 ```{r}
 select(litters_df, litter_number, everything())
 ```
+## You can also change the rows using the filter function
+
+Here, you can filter a column for specific values
+
+```{r}
+filter(litters_df, gd0_weight <22)
+```
+If you wanted to find the values for a particular column, you can filter for that value
+
+```{r}
+filter(litters_df, gd_of_birth == 20)
+```
+You can also search for an item that is NOT equal to that value
+```{r}
+filter(litters_df, gd_of_birth != 20)
+```
+You can search for two specifications at the same time as well 
+
+```{r}
+filter(litters_df, gd0_weight>=22, gd_of_birth == 20)
+```
+You can search for particular group types
+
+```{r}
+filter(litters_df, group == "Mod8")
+```
+I cna also search for 2 groups 
+
+```{r}
+filter(litters_df, group %in% c("Con7", "Mod8"))
+```
 
