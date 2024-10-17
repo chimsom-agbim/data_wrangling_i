@@ -78,4 +78,51 @@ I cna also search for 2 groups
 ```{r}
 filter(litters_df, group %in% c("Con7", "Mod8"))
 ```
+There's also the mutate function that allows you to modify an existing variable or create a new variable, however this code didn't work because there are non-numeric values in the set
+```{r}
+mutate(litters_df, wt_gain = gd18_weight - gd0_weight)
+```
+You can also arrange the data set based on the values in a particular column so it's in lowest to highest etc. 
+
+```{r}
+arrange(litters_df, pups_born_alive)
+```
+You can also arrange so that within the order for one column, a second column's values can be in order. Just enter the columns in the order that you want them arranged.So compared to the 2 values with 3, the first value will be the lowest gd0_weight.  
+```{r}
+arrange(litters_df, pups_born_alive, gd0_weight)
+```
+## The Pipe function 
+My understanding is that it's a sreies of iterative functions. I want to create the edited file litters_data_selected. 
+```{r}
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_data_selected
+```
+I REALLY like this drop_na function because it will exclude rows where a value for a particular column is gone. In this case, I will check values in the gd0_weight column 
+```{r}
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_with_only_complete_value = drop_na(litters_data_selected, gd0_weight)
+litters_with_only_complete_value
+```
+If you drop the specification for a column, you can get rid of all missing data where an Na is entered
+
+```{r}
+litters_data_raw = read_csv("./data/FAS_litters.csv")
+litters_clean_name = janitor::clean_names(litters_data_raw)
+litters_data_selected = select(litters_clean_name, -pups_survive)
+litters_with_only_complete_value = drop_na(litters_data_selected)
+litters_with_only_complete_value
+```
+Here's the pipe operator. It basically prevents you from having to retype the argument for the next function because it will automatically use it. The pipe function means do this and then do this. I'm telling it to do the same code as above.
+
+```{r}
+litters_df = read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  drop_na()
+litters_df
+```
 
