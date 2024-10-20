@@ -8,4 +8,78 @@ library(tidyverse)
 ```
 
 
+## Pivot_longer function
+This will tell you how to make your table more vertical instead of horizontal 
+Load the PULSE data. Since it's a SAS file, you have to use the HAVEN package
+
+```{r}
+pulse_data =
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names()
+pulse_data
+```
+##You can also go from wide format to long format--- 
+This will list the variable bdi_score_bl (baseline) to bdi_score_12m (12 months) in a vertical format. That's the pivot function. The names_prefix tells the code that everything in that column is a bdi_score, so it will only output the time frames for it.I also changed those columns to just visit in general. 
+
+```{r}
+pulse_data_tidy =
+  pulse_data %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit", 
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+    )
+pulse_data_tidy
+
+```
+You can combine the above code into one! 
+
+```{r}
+pulse_data =
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m, 
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  )
+pulse_data
+```
+## The RELOCATE function changes orders of columns. 
+And then if you want the first 2 columns to be ID then VISIT, use the relocate function.
+
+```{r}
+pulse_data =
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m, 
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) %>% 
+  relocate(id,visit) 
+  
+pulse_data
+```
+## How to have comparable values in a column
+And finally, let's say I want the visit column to all have comparable values, so 00, 01, 06, 12m, I can use the mutate and recode functions. 
+
+```{r}
+pulse_data =
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m, 
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) %>% 
+  relocate(id,visit) %>% 
+  mutate(visit = recode(visit, "bl" = "00m"))
+pulse_data
+```
+BEAUTIFUL!! 
 
