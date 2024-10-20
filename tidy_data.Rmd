@@ -83,3 +83,23 @@ pulse_data
 ```
 BEAUTIFUL!! 
 
+## Pivor_Wider is also a function 
+
+Let's make up some data into a table! 
+```{r}
+analysis_result = 
+  tibble(
+    group = c("treatment", "treatment", "placebo", "placebo"), 
+    time = c("pre", "post", "pre", "post"), 
+    mean = c(4,8,3.5, 4)
+  )
+analysis_result
+```
+```{r}
+analysis_result %>% 
+  pivot_wider(
+    names_from = "time",
+    values_from = "mean"
+  )
+```
+
