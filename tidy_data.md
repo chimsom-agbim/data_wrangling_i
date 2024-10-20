@@ -351,3 +351,214 @@ lotr_tidy
     ## 16 return_king     Hobbit female     2
     ## 17 return_king     Man    male    2459
     ## 18 return_king     Man    female   268
+
+## Joining datasets— These both have information about the litters!
+
+Import the FAS datasets.After importing, always clean!
+
+``` r
+pups_df = 
+  read_csv("./data/FAS_pups.csv") %>% 
+  janitor::clean_names() 
+```
+
+    ## Rows: 313 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (2): Litter Number, PD ears
+    ## dbl (4): Sex, PD eyes, PD pivot, PD walk
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+pups_df
+```
+
+    ## # A tibble: 313 × 6
+    ##    litter_number   sex pd_ears pd_eyes pd_pivot pd_walk
+    ##    <chr>         <dbl> <chr>     <dbl>    <dbl>   <dbl>
+    ##  1 #85               1 4            13        7      11
+    ##  2 #85               1 4            13        7      12
+    ##  3 #1/2/95/2         1 5            13        7       9
+    ##  4 #1/2/95/2         1 5            13        8      10
+    ##  5 #5/5/3/83/3-3     1 5            13        8      10
+    ##  6 #5/5/3/83/3-3     1 5            14        6       9
+    ##  7 #5/4/2/95/2       1 .            14        5       9
+    ##  8 #4/2/95/3-3       1 4            13        6       8
+    ##  9 #4/2/95/3-3       1 4            13        7       9
+    ## 10 #2/2/95/3-2       1 4            NA        8      10
+    ## # ℹ 303 more rows
+
+``` r
+litters_df =
+  read_csv("./data/FAS_litters.csv")
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+Then I’m changing sex to female and male instead of 1 and 2.
+
+``` r
+pups_df = 
+  read_csv("./data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(sex = recode(sex, `1`= "male", `2` = "female"))
+```
+
+    ## Rows: 313 Columns: 6
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (2): Litter Number, PD ears
+    ## dbl (4): Sex, PD eyes, PD pivot, PD walk
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+pups_df
+```
+
+    ## # A tibble: 313 × 6
+    ##    litter_number sex   pd_ears pd_eyes pd_pivot pd_walk
+    ##    <chr>         <chr> <chr>     <dbl>    <dbl>   <dbl>
+    ##  1 #85           male  4            13        7      11
+    ##  2 #85           male  4            13        7      12
+    ##  3 #1/2/95/2     male  5            13        7       9
+    ##  4 #1/2/95/2     male  5            13        8      10
+    ##  5 #5/5/3/83/3-3 male  5            13        8      10
+    ##  6 #5/5/3/83/3-3 male  5            14        6       9
+    ##  7 #5/4/2/95/2   male  .            14        5       9
+    ##  8 #4/2/95/3-3   male  4            13        6       8
+    ##  9 #4/2/95/3-3   male  4            13        7       9
+    ## 10 #2/2/95/3-2   male  4            NA        8      10
+    ## # ℹ 303 more rows
+
+``` r
+litters_df =
+  read_csv("./data/FAS_litters.csv")
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_df =
+  read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  relocate(litter_number)
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_df
+```
+
+    ## # A tibble: 49 × 8
+    ##    litter_number   group gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr>           <chr> <chr>      <chr>             <dbl>           <dbl>
+    ##  1 #85             Con7  19.7       34.7                 20               3
+    ##  2 #1/2/95/2       Con7  27         42                   19               8
+    ##  3 #5/5/3/83/3-3   Con7  26         41.4                 19               6
+    ##  4 #5/4/2/95/2     Con7  28.5       44.1                 19               5
+    ##  5 #4/2/95/3-3     Con7  <NA>       <NA>                 20               6
+    ##  6 #2/2/95/3-2     Con7  <NA>       <NA>                 20               6
+    ##  7 #1/5/3/83/3-3/2 Con7  <NA>       <NA>                 20               9
+    ##  8 #3/83/3-3       Con8  <NA>       <NA>                 20               9
+    ##  9 #2/95/3         Con8  <NA>       <NA>                 20               8
+    ## 10 #3/5/2/2/95     Con8  28.5       <NA>                 20               8
+    ## # ℹ 39 more rows
+    ## # ℹ 2 more variables: pups_dead_birth <dbl>, pups_survive <dbl>
+
+Now, I note that the group variable has different groups but also on
+different days (day 7 vs. day 8). I can separate them! I tell it to
+separate after 3 characters, and I list the 2 categories I want instead.
+
+``` r
+litters_df =
+  read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  relocate(litter_number) %>% 
+  separate(group, into= c("dose", "day_of_tx"), sep=3)
+```
+
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (4): Group, Litter Number, GD0 weight, GD18 weight
+    ## dbl (4): GD of Birth, Pups born alive, Pups dead @ birth, Pups survive
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_df
+```
+
+    ## # A tibble: 49 × 9
+    ##    litter_number   dose  day_of_tx gd0_weight gd18_weight gd_of_birth
+    ##    <chr>           <chr> <chr>     <chr>      <chr>             <dbl>
+    ##  1 #85             Con   7         19.7       34.7                 20
+    ##  2 #1/2/95/2       Con   7         27         42                   19
+    ##  3 #5/5/3/83/3-3   Con   7         26         41.4                 19
+    ##  4 #5/4/2/95/2     Con   7         28.5       44.1                 19
+    ##  5 #4/2/95/3-3     Con   7         <NA>       <NA>                 20
+    ##  6 #2/2/95/3-2     Con   7         <NA>       <NA>                 20
+    ##  7 #1/5/3/83/3-3/2 Con   7         <NA>       <NA>                 20
+    ##  8 #3/83/3-3       Con   8         <NA>       <NA>                 20
+    ##  9 #2/95/3         Con   8         <NA>       <NA>                 20
+    ## 10 #3/5/2/2/95     Con   8         28.5       <NA>                 20
+    ## # ℹ 39 more rows
+    ## # ℹ 3 more variables: pups_born_alive <dbl>, pups_dead_birth <dbl>,
+    ## #   pups_survive <dbl>
+
+Now to join them. With left join, I’m joining everything in the pups_df
+into the litters_df, so if columns in pups_df don’t exist in litters_df,
+or vice versa but read into this.
+
+``` r
+fas_df = 
+ left_join(pups_df, litters_df, by = "litter_number")
+fas_df
+```
+
+    ## # A tibble: 313 × 14
+    ##    litter_number sex   pd_ears pd_eyes pd_pivot pd_walk dose  day_of_tx
+    ##    <chr>         <chr> <chr>     <dbl>    <dbl>   <dbl> <chr> <chr>    
+    ##  1 #85           male  4            13        7      11 Con   7        
+    ##  2 #85           male  4            13        7      12 Con   7        
+    ##  3 #1/2/95/2     male  5            13        7       9 Con   7        
+    ##  4 #1/2/95/2     male  5            13        8      10 Con   7        
+    ##  5 #5/5/3/83/3-3 male  5            13        8      10 Con   7        
+    ##  6 #5/5/3/83/3-3 male  5            14        6       9 Con   7        
+    ##  7 #5/4/2/95/2   male  .            14        5       9 Con   7        
+    ##  8 #4/2/95/3-3   male  4            13        6       8 Con   7        
+    ##  9 #4/2/95/3-3   male  4            13        7       9 Con   7        
+    ## 10 #2/2/95/3-2   male  4            NA        8      10 Con   7        
+    ## # ℹ 303 more rows
+    ## # ℹ 6 more variables: gd0_weight <chr>, gd18_weight <chr>, gd_of_birth <dbl>,
+    ## #   pups_born_alive <dbl>, pups_dead_birth <dbl>, pups_survive <dbl>
+
+So the first 5 columns were in the pups df and dose and day of treatment
+were in litters

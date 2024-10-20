@@ -157,4 +157,54 @@ lotr_tidy =
   )
 lotr_tidy
 ```
+## Joining datasets--- These both have information about the litters! 
 
+Import the FAS datasets.After importing, always clean!
+
+```{r}
+pups_df = 
+  read_csv("./data/FAS_pups.csv") %>% 
+  janitor::clean_names() 
+pups_df
+
+litters_df =
+  read_csv("./data/FAS_litters.csv")
+```
+Then I'm changing sex to female and male instead of 1 and 2. 
+```{r}
+pups_df = 
+  read_csv("./data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(sex = recode(sex, `1`= "male", `2` = "female"))
+pups_df
+
+litters_df =
+  read_csv("./data/FAS_litters.csv")
+
+```
+```{r}
+litters_df =
+  read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  relocate(litter_number)
+litters_df
+  
+```
+Now, I note that the group variable has different groups but also on different days (day 7 vs. day 8). I can separate them! I tell it to separate after 3 characters, and I list the 2 categories I want instead. 
+
+```{r}
+litters_df =
+  read_csv("./data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  relocate(litter_number) %>% 
+  separate(group, into= c("dose", "day_of_tx"), sep=3)
+litters_df
+```
+Now to join them. With left join, I'm joining everything in the pups_df into the litters_df, so if columns in pups_df don't exist in litters_df, or vice versa but read into this. 
+
+```{r}
+fas_df = 
+ left_join(pups_df, litters_df, by = "litter_number")
+fas_df
+```
+So the first 5 columns were in the pups df and dose and day of treatment were in litters
